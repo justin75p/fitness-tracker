@@ -5,7 +5,6 @@ class User():
     def __init__(self, name, starting_weight, goal_weight, maintenance_calories):
         self.name = name
         self.starting_weight = starting_weight
-        self.current_weight = starting_weight
         self.goal_weight = goal_weight
         self.maintenance_calories = maintenance_calories
 
