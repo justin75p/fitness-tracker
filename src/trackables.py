@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, time, timedelta
 
 # User class containing starting weight, goal weight, and maintenance calories
 class User():
@@ -19,8 +19,9 @@ class DailyEntry():
 
 # Class to log workouts (type, duration and intensity)
 class WorkoutEntry():
-    def __init__(self, entry_date: date, workout_type, minutes, intensity):
+    def __init__(self, entry_date: date, workout_time: time, workout_type, minutes, intensity):
         self.entry_date = entry_date
+        self.workout_time = workout_time
         self.workout_type = workout_type
         self.minutes = minutes
         self.intensity = intensity
