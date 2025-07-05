@@ -64,6 +64,21 @@ class Database():
 
         connection.commit()
         connection.close()
+    
+    # Fetch user data from table
+    def get_user(self, name):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+
+        query = """SELECT * FROM users WHERE name = (?)"""
+        cursor.execute(query, (name,))
+
+        output = cursor.fetchone()
+        connection.close()
+        
+        if output:
+            user = User(output[0], output[1], output[2], output[3])
+            return user
 
     # Insert a Daily Entry into the daily entries table
     def insert_daily_entry(self, daily_entry: DailyEntry):
