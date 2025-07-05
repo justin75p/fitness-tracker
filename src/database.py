@@ -3,10 +3,12 @@ from datetime import date, datetime, timedelta
 from .trackables import User, DailyEntry, WorkoutEntry, WeeklySummary
 
 class Database():
+    # Constructor
     def __init__(self):
         self.db_path = "fitness_data.db"
         self.create_tables()
     
+    # Helper method to create all necessary tables
     def create_tables(self):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
@@ -32,8 +34,8 @@ class Database():
 
         # Workout entry table
         workout_entry_table_query = """CREATE TABLE IF NOT EXISTS workout_entries(
-            id INTEGER PRIMARY KEY,
             entry_date DATE,
+            workout_time TIME,
             workout_type TEXT,
             minutes INTEGER,
             intensity TEXT
@@ -124,6 +126,24 @@ class Database():
     def insert_workout_entry(self, workout_entry: WorkoutEntry):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
+
+        query = """
+                INSERT INTO workout_entries(
+                    entry_date,
+                    workout_time,
+                    workout_type,
+                    minutes,
+                    intensity
+                )
+                VALUES (
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?
+                )
+                """
+        cursor.execute(query, ())
 
 
             
