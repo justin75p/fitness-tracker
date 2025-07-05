@@ -1,5 +1,5 @@
 import sqlite3
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from .trackables import User, DailyEntry, WorkoutEntry, WeeklySummary
 
 class Database():
@@ -84,6 +84,41 @@ class Database():
     def insert_daily_entry(self, daily_entry: DailyEntry):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
+        query = """
+            INSERT INTO daily_entries(
+                entry_date,
+                weight,
+                calories,
+                steps,
+                sleep
+            )
+            VALUES(
+                ?,
+                ?,
+                ?,
+                ?,
+                ?
+            )
+            """
+        cursor.execute(query, (daily_entry.entry_date.strftime("%Y-%m-%d"), daily_entry.weight, daily_entry.calories, daily_entry.steps, daily_entry.sleep))
+
+        connection.commit()
+        connection.close()
+    
+    # Fetch daily entry from table
+    def get_daily_entry(self, entry_date: date):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+
+        query = """SELECT * FROM daily_entries WHERE entry_date = (?)"""
+        cursor.execute(query, (entry_date.strftime("%Y-%m-%d"),))
+
+        output = cursor.fetchone()
+        connection.close()
+
+        if output:
+            daily_entry = DailyEntry(datetime.strptime(output[0], "%Y-%m-%d").date(), output[1], output[2], output[3], output[4])
+            return daily_entry
 
     # Insert a Workout Entry into the workout entries table
     def insert_workout_entry(self, workout_entry: WorkoutEntry):
