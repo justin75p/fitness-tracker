@@ -10,7 +10,7 @@ class User():
 
 # Class to log weight, calories, steps and sleep daily
 class DailyEntry():
-    def __init__(self, entry_date, weight, calories, steps, sleep):
+    def __init__(self, entry_date: date, weight, calories, steps, sleep):
         self.entry_date = entry_date
         self.weight = weight
         self.calories = calories
@@ -19,7 +19,7 @@ class DailyEntry():
 
 # Class to log workouts (type, duration and intensity)
 class WorkoutEntry():
-    def __init__(self, entry_date, workout_type, minutes, intensity):
+    def __init__(self, entry_date: date, workout_type, minutes, intensity):
         self.entry_date = entry_date
         self.workout_type = workout_type
         self.minutes = minutes
@@ -27,6 +27,6 @@ class WorkoutEntry():
 
 # Class to summarize a weeks worth of logs
 class WeeklySummary():
-    def __init__(self, week_start_date):
+    def __init__(self, week_start_date: date):
         # TODO: Gather 7 days of logs from database
         self.start_date = week_start_date
