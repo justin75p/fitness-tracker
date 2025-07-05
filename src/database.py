@@ -47,6 +47,23 @@ class Database():
     def insert_user(self, user: User):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
+        query = """
+            INSERT INTO users(
+                name,
+                starting_weight,
+                goal_weight,
+                maintenance_calories
+            )
+            VALUES(
+                ?,
+                ?,
+                ?,
+                ?
+            )"""
+        cursor.execute(query, (user.name, user.starting_weight, user.goal_weight, user.maintenance_calories))
+
+        connection.commit()
+        connection.close()
 
     # Insert a Daily Entry into the daily entries table
     def insert_daily_entry(self, daily_entry: DailyEntry):
