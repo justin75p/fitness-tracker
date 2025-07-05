@@ -1,5 +1,5 @@
 import sqlite3
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time, timedelta
 from .trackables import User, DailyEntry, WorkoutEntry, WeeklySummary
 
 class Database():
@@ -143,7 +143,27 @@ class Database():
                     ?
                 )
                 """
-        cursor.execute(query, ())
+        cursor.execute(query, (workout_entry.entry_date.strftime("%Y-%m-%d"), workout_entry.workout_time.strftime("%H:%M"),
+                               workout_entry.workout_type, workout_entry.minutes, workout_entry.intensity))
+            
+        connection.commit()
+        connection.close()
+
+    # Fetch a workout entry using the entry date and workout time 
+    def get_workout_entry(self, entry_date: date, workout_time: time):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+
+        query = """SELECT * FROM workout_entries WHERE entry_date = (?) AND workout_time = (?)"""
+        cursor.execute(query, (entry_date.strftime("%Y-%m-%d"), workout_time.strftime("%H:%M")))
+
+        output = cursor.fetchone()
+        connection.close()
+
+        if output:
+            workout_entry = WorkoutEntry(datetime.strptime(output[0], "%Y-%m-%d").date(), datetime.strptime(output[1], "%H:%M").time(),
+                                         output[2], output[3], output[4])
+            return workout_entry
 
 
             
