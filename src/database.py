@@ -1,6 +1,6 @@
 import sqlite3
 from datetime import date, timedelta
-from trackables import User, DailyEntry, WorkoutEntry, WeeklySummary
+from .trackables import User, DailyEntry, WorkoutEntry, WeeklySummary
 
 class Database():
     def __init__(self):
@@ -75,7 +75,7 @@ class Database():
 
         output = cursor.fetchone()
         connection.close()
-        
+
         if output:
             user = User(output[0], output[1], output[2], output[3])
             return user
