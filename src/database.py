@@ -6,7 +6,7 @@ class Database():
     def __init__(self):
         self.db_path = "fitness_data.db"
         self.create_tables()
-
+    
     def create_tables(self):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
@@ -42,5 +42,22 @@ class Database():
 
         connection.commit()
         connection.close()
-        
 
+    # Insert a user into the user table
+    def insert_user(self, user: User):
+            connection = sqlite3.connect(self.db_path)
+            cursor = connection.cursor()
+
+    # Insert a Daily Entry into the daily entries table
+    def insert_daily_entry(self, daily_entry: DailyEntry):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+
+    # Insert a Workout Entry into the workout entries table
+    def insert_workout_entry(self, workout_entry: WorkoutEntry):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+
+
+            
+        
