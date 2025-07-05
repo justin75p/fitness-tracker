@@ -45,8 +45,8 @@ class Database():
 
     # Insert a user into the user table
     def insert_user(self, user: User):
-            connection = sqlite3.connect(self.db_path)
-            cursor = connection.cursor()
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
 
     # Insert a Daily Entry into the daily entries table
     def insert_daily_entry(self, daily_entry: DailyEntry):
