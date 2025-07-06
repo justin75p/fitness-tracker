@@ -15,7 +15,7 @@ class Database():
         
         # User table
         user_table_query = """CREATE TABLE IF NOT EXISTS users(
-            name TEXT,
+            user_name TEXT,
             starting_weight REAL,
             goal_weight REAL,
             maintenance_calories INTEGER
@@ -55,7 +55,7 @@ class Database():
         cursor = connection.cursor()
         query = """
             INSERT INTO users(
-                name,
+                user_name,
                 starting_weight,
                 goal_weight,
                 maintenance_calories
@@ -72,12 +72,12 @@ class Database():
         connection.close()
     
     # Fetch user data from table
-    def get_user(self, name):
+    def get_user(self, user_name):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
 
-        query = """SELECT * FROM users WHERE name = (?)"""
-        cursor.execute(query, (name,))
+        query = """SELECT * FROM users WHERE user_name = (?)"""
+        cursor.execute(query, (user_name,))
 
         output = cursor.fetchone()
         connection.close()
@@ -87,12 +87,18 @@ class Database():
             return user
         
     # Delete a user from user table
-    def delete_user(self, name):
+    def delete_user(self, user_name):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
 
-        query = """DELETE FROM users WHERE name = (?)"""
-        cursor.execute(query, (name,))
+        query = """DELETE FROM users WHERE user_name = (?)"""
+        cursor.execute(query, (user_name,))
+
+        # Additionally, delete their related data
+        query = """DELETE FROM daily_entries WHERE user_name = (?)"""
+        cursor.execute(query, (user_name,))
+        query = """DELETE FROM workout_entries WHERE user_name = (?)"""
+        cursor.execute(query, (user_name,))
 
         connection.commit()
         connection.close()
