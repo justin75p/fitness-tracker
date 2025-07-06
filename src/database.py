@@ -139,7 +139,7 @@ class Database():
         cursor = connection.cursor()
 
         query = """DELETE FROM daily_entries WHERE entry_date = (?)"""
-        cursor.execute(query, (entry_date,))
+        cursor.execute(query, (entry_date.strftime("%Y-%m-%d"),))
 
         connection.commit()
         connection.close()
