@@ -16,6 +16,12 @@ outputted_user = database.get_user("Andy")
 
 print(f"Name: {outputted_user.name}, Starting Weight: {outputted_user.starting_weight}, Goal Weight: {outputted_user.goal_weight}, Maintenance Calories: {outputted_user.maintenance_calories}")
 
+# Test removal of a User
+database.delete_user("Andy")
+outputted_user = database.get_user("Andy")
+if not outputted_user:
+    print("No user found.\n")
+
 # Test insertion and retrieval of a Daily Entry
 daily_entry = DailyEntry(date(2025, 7, 4), 150, 2500, 8000, 7.5)
 
@@ -23,6 +29,12 @@ database.insert_daily_entry(daily_entry)
 outputted_entry = database.get_daily_entry(date(2025, 7, 4))
 
 print(f"Daily Entry - Date: {outputted_entry.entry_date}, Weight: {outputted_entry.weight}, Calories: {outputted_entry.calories} Steps: {outputted_entry.steps}, Sleep: {outputted_entry.sleep} hours")
+
+# Test removal of a Daily Entry
+database.delete_daily_entry(date(2025, 7, 4))
+outputted_entry = database.get_daily_entry(date(2025, 7, 4))
+if not outputted_entry:
+    print("No Daily Entry Found.\n")
 
 # Test insertion and retrieval of a Workout Entry
 workout_entry = WorkoutEntry(date(2025, 7, 4), time(15, 30), "Running", 60, "Moderate")
@@ -32,3 +44,9 @@ outputted_workout_entry = database.get_workout_entry(date(2025, 7, 4), time(15, 
 print(f"Workout - Date: {outputted_workout_entry.entry_date}, Time: {outputted_workout_entry.workout_time}, Type: {outputted_workout_entry.workout_type}, Duration: {outputted_workout_entry.minutes} min, Intensity: {outputted_workout_entry.intensity}")
 
 # TODO: Test retrieval of Workout Entry on a day with multiple workouts
+
+# Test removal of a Workout Entry
+database.delete_workout_entry(date(2025, 7, 4), time(15, 30))
+outputted_workout_entry = database.get_workout_entry(date(2025, 7, 4), time(15, 30))
+if not outputted_workout_entry:
+    print("No Workout Entry Found.\n")
