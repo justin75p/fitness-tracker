@@ -24,21 +24,25 @@ class Database():
 
         # Daily entry table
         daily_entry_table_query = """CREATE TABLE IF NOT EXISTS daily_entries(
-            entry_date DATE PRIMARY KEY,
+            user_name TEXT,
+            entry_date DATE,
             weight REAL,
             calories INTEGER,
             steps INTEGER,
-            sleep REAL 
+            sleep REAL,
+            PRIMARY KEY (user_name, entry_date)
         )"""
         cursor.execute(daily_entry_table_query)
 
         # Workout entry table
         workout_entry_table_query = """CREATE TABLE IF NOT EXISTS workout_entries(
+            user_name TEXT,
             entry_date DATE,
             workout_time TIME,
             workout_type TEXT,
             minutes INTEGER,
-            intensity TEXT
+            intensity TEXT,
+            PRIMARY KEY (user_name, entry_date, workout_time)
         )"""
         cursor.execute(workout_entry_table_query)
 
@@ -94,11 +98,12 @@ class Database():
         connection.close()
 
     # Insert a Daily Entry into the daily entries table
-    def insert_daily_entry(self, daily_entry: DailyEntry):
+    def insert_daily_entry(self, user_name: str, daily_entry: DailyEntry):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
         query = """
             INSERT INTO daily_entries(
+                user_name,
                 entry_date,
                 weight,
                 calories,
@@ -110,47 +115,49 @@ class Database():
                 ?,
                 ?,
                 ?,
+                ?,
                 ?
             )
             """
-        cursor.execute(query, (daily_entry.entry_date.strftime("%Y-%m-%d"), daily_entry.weight, daily_entry.calories, daily_entry.steps, daily_entry.sleep))
+        cursor.execute(query, (user_name, daily_entry.entry_date.strftime("%Y-%m-%d"), daily_entry.weight, daily_entry.calories, daily_entry.steps, daily_entry.sleep))
 
         connection.commit()
         connection.close()
     
     # Fetch daily entry from table
-    def get_daily_entry(self, entry_date: date):
+    def get_daily_entry(self, user_name:str, entry_date: date):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
 
-        query = """SELECT * FROM daily_entries WHERE entry_date = (?)"""
-        cursor.execute(query, (entry_date.strftime("%Y-%m-%d"),))
+        query = """SELECT * FROM daily_entries WHERE user_name = (?) AND entry_date = (?)"""
+        cursor.execute(query, (user_name, entry_date.strftime("%Y-%m-%d")))
 
         output = cursor.fetchone()
         connection.close()
 
         if output:
-            daily_entry = DailyEntry(datetime.strptime(output[0], "%Y-%m-%d").date(), output[1], output[2], output[3], output[4])
+            daily_entry = DailyEntry(datetime.strptime(output[1], "%Y-%m-%d").date(), output[2], output[3], output[4], output[5])
             return daily_entry
         
     # Delete a daily entry from daily entries table
-    def delete_daily_entry(self, entry_date: date):
+    def delete_daily_entry(self, user_name:str, entry_date: date):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
 
-        query = """DELETE FROM daily_entries WHERE entry_date = (?)"""
-        cursor.execute(query, (entry_date.strftime("%Y-%m-%d"),))
+        query = """DELETE FROM daily_entries WHERE user_name = (?) AND entry_date = (?)"""
+        cursor.execute(query, (user_name, entry_date.strftime("%Y-%m-%d")))
 
         connection.commit()
         connection.close()
 
     # Insert a Workout Entry into the workout entries table
-    def insert_workout_entry(self, workout_entry: WorkoutEntry):
+    def insert_workout_entry(self, user_name: str, workout_entry: WorkoutEntry):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
 
         query = """
                 INSERT INTO workout_entries(
+                    user_name,
                     entry_date,
                     workout_time,
                     workout_type,
@@ -162,43 +169,44 @@ class Database():
                     ?,
                     ?,
                     ?,
+                    ?,
                     ?
                 )
                 """
-        cursor.execute(query, (workout_entry.entry_date.strftime("%Y-%m-%d"), workout_entry.workout_time.strftime("%H:%M"),
+        cursor.execute(query, (user_name, workout_entry.entry_date.strftime("%Y-%m-%d"), workout_entry.workout_time.strftime("%H:%M"),
                                workout_entry.workout_type, workout_entry.minutes, workout_entry.intensity))
             
         connection.commit()
         connection.close()
 
     # Fetch a workout entry using the entry date and workout time 
-    def get_workout_entry(self, entry_date: date, workout_time: time):
+    def get_workout_entry(self, user_name: str, entry_date: date, workout_time: time):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
 
-        query = """SELECT * FROM workout_entries WHERE entry_date = (?) AND workout_time = (?)"""
-        cursor.execute(query, (entry_date.strftime("%Y-%m-%d"), workout_time.strftime("%H:%M")))
+        query = """SELECT * FROM workout_entries WHERE user_name = (?) AND entry_date = (?) AND workout_time = (?)"""
+        cursor.execute(query, (user_name, entry_date.strftime("%Y-%m-%d"), workout_time.strftime("%H:%M")))
 
         output = cursor.fetchone()
         connection.close()
 
         if output:
-            workout_entry = WorkoutEntry(datetime.strptime(output[0], "%Y-%m-%d").date(), datetime.strptime(output[1], "%H:%M").time(),
-                                         output[2], output[3], output[4])
+            workout_entry = WorkoutEntry(datetime.strptime(output[1], "%Y-%m-%d").date(), datetime.strptime(output[2], "%H:%M").time(),
+                                         output[3], output[4], output[5])
             return workout_entry
 
     # Fetch all workout entries using the entry date
-    def get_workout_entries_by_day(self, entry_date: date):
+    def get_workout_entries_by_day(self, user_name: str, entry_date: date):
         # TODO: Implement method
         return None
     
     # Delete a workout entry using the entry date and workout time
-    def delete_workout_entry(self, entry_date: date, workout_time: time):
+    def delete_workout_entry(self, user_name: str, entry_date: date, workout_time: time):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
 
-        query = """DELETE FROM workout_entries WHERE entry_date = (?) AND workout_time = (?)"""
-        cursor.execute(query, (entry_date.strftime("%Y-%m-%d"), workout_time.strftime("%H:%M")))
+        query = """DELETE FROM workout_entries WHERE user_name = (?) AND entry_date = (?) AND workout_time = (?)"""
+        cursor.execute(query, (user_name, entry_date.strftime("%Y-%m-%d"), workout_time.strftime("%H:%M")))
 
         connection.commit()
         connection.close()
