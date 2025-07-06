@@ -81,6 +81,10 @@ class Database():
         if output:
             user = User(output[0], output[1], output[2], output[3])
             return user
+        
+    # Delete a user from user table
+    def delete_user(self, name):
+
 
     # Insert a Daily Entry into the daily entries table
     def insert_daily_entry(self, daily_entry: DailyEntry):
@@ -121,6 +125,10 @@ class Database():
         if output:
             daily_entry = DailyEntry(datetime.strptime(output[0], "%Y-%m-%d").date(), output[1], output[2], output[3], output[4])
             return daily_entry
+        
+    # Delete a daily entry from daily entries table
+    def delete_daily_entry(self, entry_date: date):
+
 
     # Insert a Workout Entry into the workout entries table
     def insert_workout_entry(self, workout_entry: WorkoutEntry):
@@ -169,6 +177,10 @@ class Database():
     def get_workout_entries_by_day(self, entry_date: date):
         # TODO: Implement method
         return None
+    
+    # Delete a workout entry using the entry date and workout time
+    def delete_workout_entry(self, entry_date: date, workout_time: time):
+        
 
             
         
