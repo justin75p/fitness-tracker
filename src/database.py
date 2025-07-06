@@ -84,7 +84,14 @@ class Database():
         
     # Delete a user from user table
     def delete_user(self, name):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
 
+        query = """DELETE FROM users WHERE name = (?)"""
+        cursor.execute(query, (name,))
+
+        connection.commit()
+        connection.close()
 
     # Insert a Daily Entry into the daily entries table
     def insert_daily_entry(self, daily_entry: DailyEntry):
@@ -128,7 +135,14 @@ class Database():
         
     # Delete a daily entry from daily entries table
     def delete_daily_entry(self, entry_date: date):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
 
+        query = """DELETE FROM daily_entries WHERE entry_date = (?)"""
+        cursor.execute(query, (entry_date,))
+
+        connection.commit()
+        connection.close()
 
     # Insert a Workout Entry into the workout entries table
     def insert_workout_entry(self, workout_entry: WorkoutEntry):
@@ -180,7 +194,14 @@ class Database():
     
     # Delete a workout entry using the entry date and workout time
     def delete_workout_entry(self, entry_date: date, workout_time: time):
-        
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+
+        query = """DELETE FROM workout_entries WHERE entry_date = (?) AND workout_time = (?)"""
+        cursor.execute(query, (entry_date.strftime("%Y-%m-%d"), workout_time.strftime("%H:%M")))
+
+        connection.commit()
+        connection.close()
 
             
         
