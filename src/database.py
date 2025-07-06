@@ -165,6 +165,10 @@ class Database():
                                          output[2], output[3], output[4])
             return workout_entry
 
+    # Fetch all workout entries using the entry date
+    def get_workout_entries_by_day(self, entry_date: date):
+        # TODO: Implement method
+        return None
 
             
         
