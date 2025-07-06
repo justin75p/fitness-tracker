@@ -5,7 +5,7 @@ from .trackables import User, DailyEntry, WorkoutEntry, WeeklySummary
 class Database():
     # Constructor
     def __init__(self):
-        self.db_path = "fitness_data.db"
+        self.db_path = "data/fitness_data.db"
         self.create_tables()
     
     # Helper method to create all necessary tables
