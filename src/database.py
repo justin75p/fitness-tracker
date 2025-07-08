@@ -86,6 +86,11 @@ class Database():
             user = User(output[0], output[1], output[2], output[3])
             return user
         
+    # Update data related to User
+    def update_user(self, user_name = None, new_name = None, new_start_weight = None, new_goal_weight = None, new_maintenance_calories = None):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+
     # Delete a user from user table
     def delete_user(self, user_name):
         connection = sqlite3.connect(self.db_path)
@@ -145,6 +150,11 @@ class Database():
             daily_entry = DailyEntry(datetime.strptime(output[1], "%Y-%m-%d").date(), output[2], output[3], output[4], output[5])
             return daily_entry
         
+    # Update data related to a daily entry
+    def update_daily_entry(self, user_name: str, entry_date: date, new_date = None, new_weight = None, new_calories = None, new_steps = None, new_sleep = None):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+
     # Delete a daily entry from daily entries table
     def delete_daily_entry(self, user_name:str, entry_date: date):
         connection = sqlite3.connect(self.db_path)
@@ -206,6 +216,11 @@ class Database():
         # TODO: Implement method
         return None
     
+    # Update data related to a workout entry
+    def update_workout_entry(self, user_name: str, entry_date: str, new_date = None, new_time = None, new_type = None, new_minutes = None, new_intensity = None):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+        
     # Delete a workout entry using the entry date and workout time
     def delete_workout_entry(self, user_name: str, entry_date: date, workout_time: time):
         connection = sqlite3.connect(self.db_path)
