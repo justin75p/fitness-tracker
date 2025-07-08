@@ -164,7 +164,7 @@ class Database():
             return daily_entry
         
     # Update data related to a daily entry
-    def update_daily_entry(self, user_name: str, entry_date: date, new_date = None, new_weight = None, new_calories = None, new_steps = None, new_sleep = None):
+    def update_daily_entry(self, user_name: str, entry_date: date, new_date: date = None, new_weight = None, new_calories = None, new_steps = None, new_sleep = None):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
 
@@ -176,6 +176,7 @@ class Database():
             cursor.execute("""UPDATE daily_entries SET steps = (?) WHERE user_name = (?) AND entry_date = (?)""", (new_steps, user_name, entry_date.strftime("%Y-%m-%d")))
         if new_sleep:
             cursor.execute("""UPDATE daily_entries SET sleep = (?) WHERE user_name = (?) AND entry_date = (?)""", (new_sleep, user_name, entry_date.strftime("%Y-%m-%d")))
+
         if new_date:
             cursor.execute("""UPDATE daily_entries SET entry_date = (?) WHERE user_name = (?) AND entry_date = (?)""", (new_date.strftime("%Y-%m-%d"), user_name, entry_date.strftime("%Y-%m-%d")))
 
@@ -244,9 +245,34 @@ class Database():
         return None
     
     # Update data related to a workout entry
-    def update_workout_entry(self, user_name: str, entry_date: str, new_date = None, new_time = None, new_type = None, new_minutes = None, new_intensity = None):
+    def update_workout_entry(self, user_name: str, entry_date: date, workout_time: time, new_date: date = None, new_time: time = None, new_type = None, new_minutes = None, new_intensity = None):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
+
+        if new_type:
+            cursor.execute("""UPDATE workout_entries SET workout_type = (?) WHERE user_name = (?) AND entry_date = (?) AND workout_time = (?)""",
+                           (new_type, user_name, entry_date.strftime("%Y-%m-%d"), workout_time.strftime("%H:%M")))
+        if new_minutes:
+            cursor.execute("""UPDATE workout_entries SET minutes = (?) WHERE user_name = (?) AND entry_date = (?) AND workout_time = (?)""",
+                           (new_minutes, user_name, entry_date.strftime("%Y-%m-%d"), workout_time.strftime("%H:%M")))
+        if new_intensity:
+            cursor.execute("""UPDATE workout_entries SET intensity = (?) WHERE user_name = (?) AND entry_date = (?) AND workout_time = (?)""",
+                           (new_intensity, user_name, entry_date.strftime("%Y-%m-%d"), workout_time.strftime("%H:%M")))
+
+        if new_date and new_time:
+            cursor.execute("""UPDATE workout_entries SET entry_date = (?) WHERE user_name = (?) AND entry_date = (?) AND workout_time = (?)""",
+                           (new_date.strftime("%Y-%m-%d"), user_name, entry_date.strftime("%Y-%m-%d"), workout_time.strftime("%H:%M")))
+            cursor.execute("""UPDATE workout_entries SET workout_time = (?) WHERE user_name = (?) AND entry_date = (?) AND workout_time = (?)""",
+                           (new_time.strftime("%H:%M"), user_name, new_date.strftime("%Y-%m-%d"), workout_time.strftime("%H:%M")))
+        elif new_date:
+            cursor.execute("""UPDATE workout_entries SET entry_date = (?) WHERE user_name = (?) AND entry_date = (?) AND workout_time = (?)""",
+                           (new_date.strftime("%Y-%m-%d"), user_name, entry_date.strftime("%Y-%m-%d"), workout_time.strftime("%H:%M")))
+        elif new_time:
+            cursor.execute("""UPDATE workout_entries SET workout_time = (?) WHERE user_name = (?) AND entry_date = (?) AND workout_time = (?)""",
+                           (new_time.strftime("%H:%M"), user_name, entry_date.strftime("%Y-%m-%d"), workout_time.strftime("%H:%M")))
+
+        connection.commit()
+        connection.close()
 
     # Delete a workout entry using the entry date and workout time
     def delete_workout_entry(self, user_name: str, entry_date: date, workout_time: time):
