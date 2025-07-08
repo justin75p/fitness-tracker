@@ -100,7 +100,7 @@ class Database():
 
         if new_name:
             cursor.execute("""UPDATE users SET user_name = (?) WHERE user_name = (?)""", (new_name, user_name))
-            
+
         connection.commit()
         connection.close()
 
@@ -167,6 +167,20 @@ class Database():
     def update_daily_entry(self, user_name: str, entry_date: date, new_date = None, new_weight = None, new_calories = None, new_steps = None, new_sleep = None):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
+
+        if new_weight:
+            cursor.execute("""UPDATE daily_entries SET weight = (?) WHERE user_name = (?) AND entry_date = (?)""", (new_weight, user_name, entry_date.strftime("%Y-%m-%d")))
+        if new_calories:
+            cursor.execute("""UPDATE daily_entries SET calories = (?) WHERE user_name = (?) AND entry_date = (?)""", (new_calories, user_name, entry_date.strftime("%Y-%m-%d")))
+        if new_steps:
+            cursor.execute("""UPDATE daily_entries SET steps = (?) WHERE user_name = (?) AND entry_date = (?)""", (new_steps, user_name, entry_date.strftime("%Y-%m-%d")))
+        if new_sleep:
+            cursor.execute("""UPDATE daily_entries SET sleep = (?) WHERE user_name = (?) AND entry_date = (?)""", (new_sleep, user_name, entry_date.strftime("%Y-%m-%d")))
+        if new_date:
+            cursor.execute("""UPDATE daily_entries SET entry_date = (?) WHERE user_name = (?) AND entry_date = (?)""", (new_date.strftime("%Y-%m-%d"), user_name, entry_date.strftime("%Y-%m-%d")))
+
+        connection.commit()
+        connection.close()
 
     # Delete a daily entry from daily entries table
     def delete_daily_entry(self, user_name:str, entry_date: date):
