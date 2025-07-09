@@ -1,11 +1,16 @@
+import os
 import sqlite3
 from datetime import date, datetime, time, timedelta
-from .trackables import User, DailyEntry, WorkoutEntry, WeeklySummary
+from trackables import User, DailyEntry, WorkoutEntry, WeeklySummary
 
 class Database():
     # Constructor
     def __init__(self):
-        self.db_path = "data/fitness_data.db"
+        project_root = os.path.dirname(os.path.dirname(__file__))
+        data_dir = os.path.join(project_root, "data")
+        os.makedirs(data_dir, exist_ok=True)
+        
+        self.db_path = os.path.join(data_dir, "fitness_data.db")
         self.create_tables()
     
     # Helper method to create all necessary tables
