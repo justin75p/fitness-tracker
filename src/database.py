@@ -86,6 +86,21 @@ class Database():
             user = User(output[0], output[1], output[2], output[3])
             return user
         
+    # Retrieve a list of all user names
+    def get_all_user_names(self):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+
+        query = """SELECT user_name FROM users"""
+        cursor.execute(query)
+        
+        output = cursor.fetchall()
+
+        user_name_list = [row[0] for row in output]
+
+        return user_name_list
+
+
     # Update data related to User
     def update_user(self, user_name, new_name = None, new_start_weight = None, new_goal_weight = None, new_maintenance_calories = None):
         connection = sqlite3.connect(self.db_path)
