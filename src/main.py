@@ -25,7 +25,12 @@ with st.form("user_creation_form", clear_on_submit= True):
 
     if submit:
         if new_user_name and starting_weight and goal_weight and maintenance_calories:
-            database.insert_user(User(new_user_name, starting_weight, goal_weight, maintenance_calories)) 
-            st.success(f"""User '{new_user_name}' created!""")
+            database.insert_user(User(new_user_name, starting_weight, goal_weight, maintenance_calories))
+            st.session_state["user_created"] = True
+            st.rerun()
         else:
             st.warning("Please fill in all required fields!")
+
+    if 'user_created' in st.session_state:
+        st.success(f"User '{new_user_name}' Created!")
+        del st.session_state['user_created']
