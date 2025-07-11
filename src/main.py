@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_extras.stylable_container import stylable_container
 import pandas as pd
 import numpy as np
 
@@ -34,3 +35,13 @@ with st.form("user_creation_form", clear_on_submit= True):
     if 'user_created' in st.session_state:
         st.success(f"User '{new_user_name}' Created!")
         del st.session_state['user_created']
+
+with stylable_container(key= "delete_user_button",
+                        css_styles= """
+                            button[data-testid="stBaseButton-secondary"] {
+                                -webkit-text-stroke: 0.5px red;
+                                border: 0.5px solid red;
+                            }
+                        """
+                    ):
+    delete_user = st.button("Delete User")
