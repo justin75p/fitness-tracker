@@ -10,7 +10,7 @@ database = Database()
 
 st.title("Fitness Tracker")
 
-user_selection = st.selectbox("Select a user:", database.get_all_user_names(), index= 0)
+user_selection = st.selectbox("Select a user:", database.get_all_user_names(), index= None, placeholder= "Select from dropdown:")
 
 with st.form("user_creation_form", clear_on_submit= True):
     new_user_name = st.text_input("Create a new user:", placeholder= "New user's name")
