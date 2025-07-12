@@ -51,5 +51,12 @@ with col1:
 
 with col2:
     if delete_user:
-        deleted_user_name = st.text_input("", label_visibility='collapsed', placeholder= "Name of user to delete:")
-        database.delete_user(deleted_user_name)
+        with st.form("user_deletion_form", clear_on_submit= True):
+            deleted_user_name = st.selectbox("Select a user to delete:", database.get_all_user_names(), index= None, placeholder= "Name of user to delete:")
+    
+            col_empty1, col_confirm, col_cancel, col_empty2 = st.columns([0.2, 0.3, 0.3, 0.2])
+
+            with col_confirm:
+                submit_delete = st.form_submit_button("Confirm Delete")
+            with col_cancel:
+                cancel_delete = st.form_submit_button("Cancel Delete")
