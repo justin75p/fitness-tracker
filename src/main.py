@@ -50,13 +50,30 @@ with col1:
         delete_user = st.button("Delete User", use_container_width= True)
 
 with col2:
-    if delete_user:
+    if delete_user or st.session_state.get('show_delete_form'):
+        st.session_state['show_delete_form'] = True
+
         with st.form("user_deletion_form", clear_on_submit= True):
             deleted_user_name = st.selectbox("Select a user to delete:", database.get_all_user_names(), index= None, placeholder= "Name of user to delete:")
-    
+
             col_empty1, col_confirm, col_cancel, col_empty2 = st.columns([0.2, 0.3, 0.3, 0.2])
 
             with col_confirm:
                 submit_delete = st.form_submit_button("Confirm Delete")
             with col_cancel:
                 cancel_delete = st.form_submit_button("Cancel Delete")
+
+            if submit_delete and deleted_user_name:
+                database.delete_user(deleted_user_name)
+                st.session_state["user_deleted"] = deleted_user_name
+                st.session_state['show_delete_form'] = False
+                st.rerun()
+            elif submit_delete and not deleted_user_name:
+                st.warning("Please specify a user to delete!")
+            elif cancel_delete:
+                st.session_state['show_delete_form'] = False
+                st.rerun()
+
+    if 'user_deleted' in st.session_state:
+        st.success(f"User '{st.session_state['user_deleted']}' Deleted!")
+        del st.session_state['user_deleted']
