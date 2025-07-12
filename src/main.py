@@ -36,12 +36,20 @@ with st.form("user_creation_form", clear_on_submit= True):
         st.success(f"User '{new_user_name}' Created!")
         del st.session_state['user_created']
 
-with stylable_container(key= "delete_user_button",
-                        css_styles= """
-                            button[data-testid="stBaseButton-secondary"] {
-                                -webkit-text-stroke: 0.5px red;
-                                border: 0.5px solid red;
-                            }
-                        """
-                    ):
-    delete_user = st.button("Delete User")
+col1, col2 = st.columns([0.18, 0.82])
+
+with col1:
+    with stylable_container(key= "delete_user_button",
+                            css_styles= """
+                                button[data-testid="stBaseButton-secondary"] {
+                                    -webkit-text-stroke: 0.5px red;
+                                    border: 0.5px solid red;
+                                }
+                            """
+                        ):
+        delete_user = st.button("Delete User", use_container_width= True)
+
+with col2:
+    if delete_user:
+        deleted_user_name = st.text_input("", label_visibility='collapsed', placeholder= "Name of user to delete:")
+        database.delete_user(deleted_user_name)
