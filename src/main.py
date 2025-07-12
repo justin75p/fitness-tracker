@@ -9,9 +9,15 @@ from database import Database
 
 database = Database()
 
-st.title("Fitness Tracker")
+st.title("Welcome to my Fitness Tracker 📊")
+st.subheader("Select your profile or create a new one to get started! 🏃‍♂️")
 
 user_selection = st.selectbox("Select a user:", database.get_all_user_names(), index= None, placeholder= "Select from dropdown:")
+
+if user_selection:
+    st.session_state['user_authenticated'] = True
+    st.session_state['selected_user'] = user_selection
+    st.switch_page("pages/dashboard.py")
 
 with st.form("user_creation_form", clear_on_submit= True):
     new_user_name = st.text_input("Create a new user:", placeholder= "New user's name")
@@ -30,10 +36,10 @@ with st.form("user_creation_form", clear_on_submit= True):
             st.session_state["user_created"] = True
             st.rerun()
         else:
-            st.warning("Please fill in all required fields!")
+            st.warning("❌ Please fill in all required fields!")
 
     if 'user_created' in st.session_state:
-        st.success(f"User '{new_user_name}' Created!")
+        st.success(f"✅ User '{new_user_name}' Created!")
         del st.session_state['user_created']
 
 col1, col2 = st.columns([0.18, 0.82])
@@ -69,11 +75,11 @@ with col2:
                 st.session_state['show_delete_form'] = False
                 st.rerun()
             elif submit_delete and not deleted_user_name:
-                st.warning("Please specify a user to delete!")
+                st.warning("❌ Please specify a user to delete!")
             elif cancel_delete:
                 st.session_state['show_delete_form'] = False
                 st.rerun()
 
     if 'user_deleted' in st.session_state:
-        st.success(f"User '{st.session_state['user_deleted']}' Deleted!")
+        st.success(f"✅ User '{st.session_state['user_deleted']}' Deleted!")
         del st.session_state['user_deleted']
