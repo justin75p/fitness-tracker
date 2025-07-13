@@ -25,9 +25,3 @@ class WorkoutEntry():
         self.workout_type = workout_type
         self.minutes = minutes
         self.intensity = intensity
-
-# Class to summarize a weeks worth of logs
-class WeeklySummary():
-    def __init__(self, week_start_date: date):
-        # TODO: Gather 7 days of logs from database
-        self.start_date = week_start_date

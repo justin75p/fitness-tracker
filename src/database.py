@@ -183,6 +183,10 @@ class Database():
             daily_entry = DailyEntry(datetime.strptime(output[1], "%Y-%m-%d").date(), output[2], output[3], output[4], output[5])
             return daily_entry
         
+    # Fetch a week's worth of daily entries 
+    def get_daily_entries_by_week(self, user_name: str, week_start_date: date):
+        return None
+        
     # Update data related to a daily entry
     def update_daily_entry(self, user_name: str, entry_date: date, new_date: date = None, new_weight = None, new_calories = None, new_steps = None, new_sleep = None):
         connection = sqlite3.connect(self.db_path)
@@ -262,6 +266,10 @@ class Database():
     # Fetch all workout entries using the entry date
     def get_workout_entries_by_day(self, user_name: str, entry_date: date):
         # TODO: Implement method
+        return None
+    
+    # Fetch all workout entries in a one week span
+    def get_workout_entries_by_week(self, user_name: str, entry_date: date):
         return None
     
     # Update data related to a workout entry
