@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from datetime import date, time, timedelta
-from src.trackables import User, DailyEntry, WorkoutEntry, WeeklySummary
+from src.trackables import User, DailyEntry, WorkoutEntry
 from src.database import Database
 
 database = Database()

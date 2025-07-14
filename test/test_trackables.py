@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from datetime import date, time
-from src.trackables import User, DailyEntry, WorkoutEntry, WeeklySummary
+from src.trackables import User, DailyEntry, WorkoutEntry
 
 # Test User class
 user = User("Justin", 165, 155, 2700)
@@ -16,7 +16,3 @@ print(f"Daily Entry - Date: {entry.entry_date}, Weight: {entry.weight}, Calories
 # Test WorkoutEntry class
 workout = WorkoutEntry(date.today(), time(16, 30), "Running", 30, "Moderate")
 print(f"Workout - Date: {workout.entry_date}, Time: {workout.workout_time}, Type: {workout.workout_type}, Duration: {workout.minutes} min, Intensity: {workout.intensity}")
-
-# Test WeeklySummary class
-weekly = WeeklySummary(date.today())
-print(f"Weekly Summary starting from {weekly.start_date}:")
