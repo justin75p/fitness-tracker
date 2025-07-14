@@ -51,3 +51,42 @@ database.delete_user("Andy")
 outputted_user = database.get_user("Andy")
 if not outputted_user:
     print("No user found.\n")
+
+# -----------------------------------------------------------------------------------------------------------------------------------------------
+
+# Test the new date range methods
+user = User("TestUser", 125, 135, 2800)
+database.insert_user(user)
+
+# Insert a week's worth of entries
+test_dates = [
+    date(2025, 7, 7),   # Monday
+    date(2025, 7, 8),   # Tuesday  
+    date(2025, 7, 9),   # Wednesday
+    date(2025, 7, 10),  # Thursday
+    date(2025, 7, 11),  # Friday
+    date(2025, 7, 12),  # Saturday
+    date(2025, 7, 13),  # Sunday
+]
+
+for test_date in test_dates:
+    daily_entry = DailyEntry(test_date, 125, 2800, 10000, 8)
+    database.insert_daily_entry("TestUser", daily_entry)
+    
+    workout_entry = WorkoutEntry(test_date, time(12, 00), "Running", 30, "Moderate")
+    database.insert_workout_entry("TestUser", workout_entry)
+
+# Test getting the week's data
+monday = date(2025, 7, 7)
+daily_results = database.get_daily_entries_from_date("TestUser", monday, 7)
+workout_results = database.get_workout_entries_from_date("TestUser", monday, 7)
+
+print(f"Found {len(daily_results)} daily entries and {len(workout_results)} workout entries:")
+
+for entry in daily_results:
+    print(f"Daily Entry: {entry.entry_date}")
+
+for entry in workout_results:
+    print(f"Workout Entry: {entry.entry_date}")
+
+database.delete_user("TestUser")
