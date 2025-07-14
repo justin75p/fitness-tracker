@@ -183,8 +183,8 @@ class Database():
             daily_entry = DailyEntry(datetime.strptime(output[1], "%Y-%m-%d").date(), output[2], output[3], output[4], output[5])
             return daily_entry
         
-    # Fetch a week's worth of daily entries 
-    def get_daily_entries_by_week(self, user_name: str, week_start_date: date):
+    # Fetch all daily entries from a specified date in a N day span
+    def get_daily_entries_from_date(self, user_name: str, entry_date: date, num_days):
         return None
         
     # Update data related to a daily entry
@@ -262,14 +262,9 @@ class Database():
             workout_entry = WorkoutEntry(datetime.strptime(output[1], "%Y-%m-%d").date(), datetime.strptime(output[2], "%H:%M").time(),
                                          output[3], output[4], output[5])
             return workout_entry
-
-    # Fetch all workout entries using the entry date
-    def get_workout_entries_by_day(self, user_name: str, entry_date: date):
-        # TODO: Implement method
-        return None
     
-    # Fetch all workout entries in a one week span
-    def get_workout_entries_by_week(self, user_name: str, entry_date: date):
+    # Fetch all workout entries from a specified date in a N day span
+    def get_workout_entries_from_date(self, user_name: str, entry_date: date, num_days):
         return None
     
     # Update data related to a workout entry
