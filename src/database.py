@@ -184,8 +184,25 @@ class Database():
             return daily_entry
         
     # Fetch all daily entries from a specified date in a N day span
-    def get_daily_entries_from_date(self, user_name: str, entry_date: date, num_days):
-        return None
+    def get_daily_entries_from_date(self, user_name: str, start_date: date, num_days):
+        connection = sqlite3.connect(self.db_path)
+        cursor = connection.cursor()
+
+        end_date = start_date + timedelta(days=num_days)
+        query = """SELECT * FROM daily_entries WHERE user_name = (?) AND entry_date >= (?) AND entry_date < (?)"""
+
+        cursor.execute(query, (user_name, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")))
+
+        output = cursor.fetchall()
+        connection.close()
+
+        if output:
+            daily_entries_list = []
+            for row in output:
+                if row:
+                    daily_entries_list.append(DailyEntry(datetime.strptime(row[1], "%Y-%m-%d").date(), row[2], row[3], row[4], row[5]))
+            return daily_entries_list
+        return [] 
         
     # Update data related to a daily entry
     def update_daily_entry(self, user_name: str, entry_date: date, new_date: date = None, new_weight = None, new_calories = None, new_steps = None, new_sleep = None):
@@ -264,7 +281,7 @@ class Database():
             return workout_entry
     
     # Fetch all workout entries from a specified date in a N day span
-    def get_workout_entries_from_date(self, user_name: str, entry_date: date, num_days):
+    def get_workout_entries_from_date(self, user_name: str, start_date: date, num_days):
         return None
     
     # Update data related to a workout entry
