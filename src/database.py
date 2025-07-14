@@ -1,7 +1,7 @@
 import os
 import sqlite3
 from datetime import date, datetime, time, timedelta
-from trackables import User, DailyEntry, WorkoutEntry, WeeklySummary
+from .trackables import User, DailyEntry, WorkoutEntry
 
 class Database():
     # Constructor
