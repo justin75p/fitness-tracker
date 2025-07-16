@@ -13,8 +13,23 @@ if not st.session_state.get('user_authenticated'):
         st.switch_page("main.py")
     st.stop()
 
+database = Database()
+
 st.title(f"Welcome back, {st.session_state['selected_user']}! 💪")
 st.subheader("Your weekly averages so far:")
+
+# Gather dates used for the averages of this week so far, and last week
+today = date.today()
+this_monday = today - timedelta(days=today.weekday())
+last_monday = this_monday - timedelta(days=7)
+
+# Gather Daily Entries from this week and last week
+this_week_daily_entries = database.get_daily_entries_from_date(st.session_state['selected_user'], this_monday, 7)
+last_week_daily_entries = database.get_daily_entries_from_date(st.session_state['selected_user'], last_monday, 7)
+
+# Gather Workout Entries from this week and last week
+this_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], this_monday, 7)
+last_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], last_monday, 7)
 
 col1, col2, col3 = st.columns(3)
 col1.metric("Weight", "70 °F", "1.2 °F", border= True)
