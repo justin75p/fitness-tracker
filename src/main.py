@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 from datetime import date, datetime, time, timedelta
-from trackables import User, DailyEntry, WorkoutEntry, WeeklySummary
+from trackables import User, DailyEntry, WorkoutEntry
 from database import Database
 
 database = Database()
