@@ -1,10 +1,10 @@
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 from datetime import date, time, timedelta
-from src.trackables import User, DailyEntry, WorkoutEntry
-from src.database import Database
+from trackables import User, DailyEntry, WorkoutEntry
+from database import Database
 
 database = Database()
 
