@@ -31,8 +31,16 @@ last_week_daily_entries = database.get_daily_entries_from_date(st.session_state[
 this_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], this_monday, 7)
 last_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], last_monday, 7)
 
+this_week_weights = [entry.weight for entry in this_week_daily_entries if entry.weight is not None]
+if this_week_weights:
+    avg_weight_this_week = sum(this_week_weights) / len(this_week_weights)
+
+last_week_weights = [entry.weight for entry in last_week_daily_entries if entry.weight is not None]
+if last_week_weights:
+    avg_weight_last_week = sum(last_week_weights) / len(last_week_weights)
+
 col1, col2, col3 = st.columns(3)
-col1.metric("Weight", "70 °F", "1.2 °F", border= True)
+col1.metric("Weight", f"{avg_weight_this_week:.2f} Lbs", f"{avg_weight_this_week - avg_weight_last_week:.2f} Lbs", border= True, help= "Your average weight this week compared to last week")
 col2.metric("Calories Consumed", "9 mph", "-8%", border= True)
 col3.metric("Daily Steps", "86%", "4%", border= True)
 
