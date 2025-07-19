@@ -61,6 +61,23 @@ else:
     calories_display = "N/A"
     calories_delta = None
 
+# ---------- Retrieve water consumed from Daily Entries to display on the daily water metric ---------- #
+this_week_water = [entry.water for entry in this_week_daily_entries if entry.water is not None]
+last_week_water = [entry.water for entry in last_week_daily_entries if entry.water is not None]
+
+if this_week_water:
+    avg_water_this_week = sum(this_week_water) / len(this_week_water)
+    water_display = f"{avg_water_this_week:.0f} mL"
+
+    if last_week_water:
+        avg_water_last_week = sum(last_week_water) / len(last_week_water)
+        water_delta = f"{avg_water_this_week - avg_water_last_week:.0f} mL"
+    else:
+        water_delta = "N/A"
+else:
+    water_display = "N/A"
+    water_delta = None
+
 # ---------- Retrieve daily steps from Daily Entries to display on the daily steps metric ---------- #
 this_week_steps = [entry.steps for entry in this_week_daily_entries if entry.steps is not None]
 last_week_steps = [entry.steps for entry in last_week_daily_entries if entry.steps is not None]
@@ -104,11 +121,12 @@ col1.metric("Weight", weight_display, weight_delta, border= True,
             help= "Your average weight this week compared to last week.")
 col2.metric("Calories Consumed", calories_display, calories_delta, border= True,
             help= "The average amount of calories consumed this week compared to last week.")
-col3.metric("Daily Steps", steps_display, steps_delta, border= True,
-            help= "The average amount of steps you took everyday this week compared to last week.")
+col3.metric("Water Consumed", water_display, water_delta, border= True,
+            help= "The average amount of water you drank everyday this week compared to last week.")
 
 col4, col5, col6 = st.columns(3)
-col4.metric("Daily Sleep", sleep_display, sleep_delta, border= True,
+col4.metric("Daily Steps", steps_display, steps_delta, border= True,
+            help= "The average amount of steps you took everyday this week compared to last week.")
+col5.metric("Daily Sleep", sleep_display, sleep_delta, border= True,
             help= "How many hours on average you slept each day this week compared to last week.")
-col5.metric("", "9 mph", "-8%", border= True)
 col6.metric("Daily Steps", "86%", "4%", border= True)
