@@ -27,10 +27,7 @@ last_monday = this_monday - timedelta(days=7)
 this_week_daily_entries = database.get_daily_entries_from_date(st.session_state['selected_user'], this_monday, 7)
 last_week_daily_entries = database.get_daily_entries_from_date(st.session_state['selected_user'], last_monday, 7)
 
-# Gather Workout Entries from this week and last week
-this_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], this_monday, 7)
-last_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], last_monday, 7)
-
+# ---------- Retrieve weight from Daily Entries to display on the weight metric ---------- #
 this_week_weights = [entry.weight for entry in this_week_daily_entries if entry.weight is not None]
 last_week_weights = [entry.weight for entry in last_week_daily_entries if entry.weight is not None]
 
@@ -47,10 +44,31 @@ else:
     weight_display = "N/A"
     weight_delta = None
 
+# ---------- Retrieve calories consumed from Daily Entries to display on the calories consumed metric ---------- #
+this_week_calories = [entry.calories for entry in this_week_daily_entries if entry.calories is not None]
+last_week_calories = [entry.calories for entry in last_week_daily_entries if entry.calories is not None]
+
+if this_week_calories:
+    avg_calories_this_week = sum(this_week_calories) / len(this_week_calories)
+    calories_display = f"{avg_calories_this_week:.0f} cal"
+
+    if last_week_calories:
+        avg_calories_last_week = sum(last_week_calories) / len(last_week_calories)
+        calories_delta = f"{avg_calories_this_week - avg_calories_last_week:.0f} cal"
+    else:
+        calories_delta = "N/A"
+else:
+    calories_display = "N/A"
+    calories_delta = None
+
+# Gather Workout Entries from this week and last week
+this_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], this_monday, 7)
+last_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], last_monday, 7)
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Weight", weight_display, weight_delta, border= True, help= "Your average weight this week compared to last week")
-col2.metric("Calories Consumed", "9 mph", "-8%", border= True)
+col1.metric("Weight", weight_display, weight_delta, border= True, help= "Your average weight this week compared to last week.")
+col2.metric("Calories Consumed", calories_display, calories_delta, border= True,
+            help= "The average amount of calories consumed this week compared to last week.")
 col3.metric("Daily Steps", "86%", "4%", border= True)
 
 col4, col5, col6 = st.columns(3)
