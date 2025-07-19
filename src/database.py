@@ -204,7 +204,7 @@ class Database():
             daily_entries_list = []
             for row in output:
                 if row:
-                    daily_entries_list.append(DailyEntry(datetime.strptime(row[1], "%Y-%m-%d").date(), row[2], row[3], row[4], row[5]))
+                    daily_entries_list.append(DailyEntry(datetime.strptime(row[1], "%Y-%m-%d").date(), row[2], row[3], row[4], row[5], row[6]))
             return daily_entries_list
         return [] 
         

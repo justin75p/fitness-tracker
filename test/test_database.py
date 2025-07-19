@@ -17,12 +17,12 @@ outputted_user = database.get_user("Andy")
 print(f"Name: {outputted_user.name}, Starting Weight: {outputted_user.starting_weight}, Goal Weight: {outputted_user.goal_weight}, Maintenance Calories: {outputted_user.maintenance_calories}")
 
 # Test insertion and retrieval of a Daily Entry
-daily_entry = DailyEntry(date(2025, 7, 4), 150, 2500, 8000, 7.5)
+daily_entry = DailyEntry(date(2025, 7, 4), 150, 2500, 3500, 8000, 7.5)
 
 database.insert_daily_entry("Andy", daily_entry)
 outputted_entry = database.get_daily_entry("Andy", date(2025, 7, 4))
 
-print(f"Daily Entry - Date: {outputted_entry.entry_date}, Weight: {outputted_entry.weight}, Calories: {outputted_entry.calories} Steps: {outputted_entry.steps}, Sleep: {outputted_entry.sleep} hours")
+print(f"Daily Entry - Date: {outputted_entry.entry_date}, Weight: {outputted_entry.weight}, Calories: {outputted_entry.calories}, Water: {outputted_entry.water}, Steps: {outputted_entry.steps}, Sleep: {outputted_entry.sleep} hours")
 
 # Test removal of a Daily Entry
 database.delete_daily_entry("Andy", date(2025, 7, 4))
@@ -70,7 +70,7 @@ test_dates = [
 ]
 
 for test_date in test_dates:
-    daily_entry = DailyEntry(test_date, 125, 2800, 10000, 8)
+    daily_entry = DailyEntry(test_date, 125, 2800, 4000, 10000, 8)
     database.insert_daily_entry("TestUser", daily_entry)
     
     workout_entry = WorkoutEntry(test_date, time(12, 00), "Running", 30, "Moderate")
