@@ -33,11 +33,11 @@ last_week_weights = [entry.weight for entry in last_week_daily_entries if entry.
 
 if this_week_weights:
     avg_weight_this_week = sum(this_week_weights) / len(this_week_weights)
-    weight_display = f"{avg_weight_this_week:.2f} Lbs"
+    weight_display = f"{avg_weight_this_week:.2f} lbs"
 
     if last_week_weights:
         avg_weight_last_week = sum(last_week_weights) / len(last_week_weights)
-        weight_delta = f"{avg_weight_this_week - avg_weight_last_week:.2f} Lbs"
+        weight_delta = f"{avg_weight_this_week - avg_weight_last_week:.2f} lbs"
     else:
         weight_delta = "N/A"
 else:
@@ -61,6 +61,23 @@ else:
     calories_display = "N/A"
     calories_delta = None
 
+# ---------- Retrieve daily steps from Daily Entries to display on the daily steps metric ---------- #
+this_week_steps = [entry.steps for entry in this_week_daily_entries if entry.steps is not None]
+last_week_steps = [entry.steps for entry in last_week_daily_entries if entry.steps is not None]
+
+if this_week_steps:
+    avg_steps_this_week = sum(this_week_steps) / len(this_week_steps)
+    steps_display = f"{avg_steps_this_week:.0f} steps"
+
+    if last_week_steps:
+        avg_steps_last_week = sum(last_week_steps) / len(last_week_steps)
+        steps_delta = f"{avg_steps_this_week - avg_steps_last_week:.0f} steps"
+    else:
+        steps_delta = "N/A"
+else:
+    steps_display = "N/A"
+    steps_delta = None
+
 # Gather Workout Entries from this week and last week
 this_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], this_monday, 7)
 last_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], last_monday, 7)
@@ -69,7 +86,8 @@ col1, col2, col3 = st.columns(3)
 col1.metric("Weight", weight_display, weight_delta, border= True, help= "Your average weight this week compared to last week.")
 col2.metric("Calories Consumed", calories_display, calories_delta, border= True,
             help= "The average amount of calories consumed this week compared to last week.")
-col3.metric("Daily Steps", "86%", "4%", border= True)
+col3.metric("Daily Steps", steps_display, steps_delta, border= True,
+            help= "The average amount of steps you took everyday this week compared to last week.")
 
 col4, col5, col6 = st.columns(3)
 col4.metric("Sleep", "70 °F", "1.2 °F", border= True)
