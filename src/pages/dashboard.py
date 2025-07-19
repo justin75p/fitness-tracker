@@ -116,6 +116,24 @@ else:
 this_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], this_monday, 7)
 last_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], last_monday, 7)
 
+# ---------- Retrieve workout minutes from Workout Entries to display on the total workout minutes metric ---------- #
+this_week_minutes = [workout_entry.minutes for workout_entry in this_week_workout_entries if workout_entry.minutes is not None]
+last_week_minutes = [workout_entry.minutes for workout_entry in last_week_workout_entries if workout_entry.minutes is not None]
+
+this_week_total_minutes = sum(this_week_minutes) if this_week_minutes else 0
+last_week_total_minutes = sum(last_week_minutes) if last_week_minutes else 0
+
+if this_week_total_minutes != 0:
+    minutes_display = f"{this_week_total_minutes:.1f} mins"
+
+    if last_week_total_minutes != 0:
+        minutes_delta = f"{this_week_total_minutes - last_week_total_minutes:.1f} mins"
+    else:   
+        minutes_delta = "N/A"
+else:
+    minutes_display = "N/A"
+    minutes_delta = None
+
 col1, col2, col3 = st.columns(3)
 col1.metric("Weight", weight_display, weight_delta, border= True,
             help= "Your average weight this week compared to last week.")
@@ -129,4 +147,5 @@ col4.metric("Daily Steps", steps_display, steps_delta, border= True,
             help= "The average amount of steps you took everyday this week compared to last week.")
 col5.metric("Daily Sleep", sleep_display, sleep_delta, border= True,
             help= "How many hours on average you slept each day this week compared to last week.")
-col6.metric("Daily Steps", "86%", "4%", border= True)
+col6.metric("Total Workout Time", minutes_display, minutes_delta, border= True,
+            help= "The total amount of minutes you spent working out this week compared to last week.")
