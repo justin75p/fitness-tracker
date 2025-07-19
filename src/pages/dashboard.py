@@ -78,18 +78,37 @@ else:
     steps_display = "N/A"
     steps_delta = None
 
+# ---------- Retrieve hours of sleep from Daily Entries to display on the daily sleep metric ---------- #
+this_week_sleep = [entry.sleep for entry in this_week_daily_entries if entry.sleep is not None]
+last_week_sleep = [entry.sleep for entry in last_week_daily_entries if entry.sleep is not None]
+
+if this_week_sleep:
+    avg_sleep_this_week = sum(this_week_sleep) / len(this_week_sleep)
+    sleep_display = f"{avg_sleep_this_week:.1f} hrs"
+
+    if last_week_sleep:
+        avg_sleep_last_week = sum(last_week_sleep) / len(last_week_sleep)
+        sleep_delta = f"{avg_sleep_this_week - avg_sleep_last_week:.1f} hrs"
+    else:
+        sleep_delta = "N/A"
+else:
+    sleep_display = "N/A"
+    sleep_delta = None
+
 # Gather Workout Entries from this week and last week
 this_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], this_monday, 7)
 last_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], last_monday, 7)
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Weight", weight_display, weight_delta, border= True, help= "Your average weight this week compared to last week.")
+col1.metric("Weight", weight_display, weight_delta, border= True,
+            help= "Your average weight this week compared to last week.")
 col2.metric("Calories Consumed", calories_display, calories_delta, border= True,
             help= "The average amount of calories consumed this week compared to last week.")
 col3.metric("Daily Steps", steps_display, steps_delta, border= True,
             help= "The average amount of steps you took everyday this week compared to last week.")
 
 col4, col5, col6 = st.columns(3)
-col4.metric("Sleep", "70 °F", "1.2 °F", border= True)
+col4.metric("Daily Sleep", sleep_display, sleep_delta, border= True,
+            help= "How many hours on average you slept each day this week compared to last week.")
 col5.metric("", "9 mph", "-8%", border= True)
 col6.metric("Daily Steps", "86%", "4%", border= True)
