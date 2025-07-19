@@ -32,15 +32,24 @@ this_week_workout_entries = database.get_workout_entries_from_date(st.session_st
 last_week_workout_entries = database.get_workout_entries_from_date(st.session_state['selected_user'], last_monday, 7)
 
 this_week_weights = [entry.weight for entry in this_week_daily_entries if entry.weight is not None]
+last_week_weights = [entry.weight for entry in last_week_daily_entries if entry.weight is not None]
+
 if this_week_weights:
     avg_weight_this_week = sum(this_week_weights) / len(this_week_weights)
+    weight_display = f"{avg_weight_this_week:.2f} Lbs"
 
-last_week_weights = [entry.weight for entry in last_week_daily_entries if entry.weight is not None]
-if last_week_weights:
-    avg_weight_last_week = sum(last_week_weights) / len(last_week_weights)
+    if last_week_weights:
+        avg_weight_last_week = sum(last_week_weights) / len(last_week_weights)
+        weight_delta = f"{avg_weight_this_week - avg_weight_last_week:.2f} Lbs"
+    else:
+        weight_delta = "N/A"
+else:
+    weight_display = "N/A"
+    weight_delta = None
+
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Weight", f"{avg_weight_this_week:.2f} Lbs", f"{avg_weight_this_week - avg_weight_last_week:.2f} Lbs", border= True, help= "Your average weight this week compared to last week")
+col1.metric("Weight", weight_display, weight_delta, border= True, help= "Your average weight this week compared to last week")
 col2.metric("Calories Consumed", "9 mph", "-8%", border= True)
 col3.metric("Daily Steps", "86%", "4%", border= True)
 
