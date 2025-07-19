@@ -33,6 +33,7 @@ class Database():
             entry_date DATE,
             weight REAL,
             calories INTEGER,
+            water INTEGER,
             steps INTEGER,
             sleep REAL,
             PRIMARY KEY (user_name, entry_date)
@@ -151,6 +152,7 @@ class Database():
                 entry_date,
                 weight,
                 calories,
+                water,
                 steps,
                 sleep
             )
@@ -160,10 +162,12 @@ class Database():
                 ?,
                 ?,
                 ?,
+                ?,
                 ?
             )
             """
-        cursor.execute(query, (user_name, daily_entry.entry_date.strftime("%Y-%m-%d"), daily_entry.weight, daily_entry.calories, daily_entry.steps, daily_entry.sleep))
+        cursor.execute(query, (user_name, daily_entry.entry_date.strftime("%Y-%m-%d"),
+                               daily_entry.weight, daily_entry.calories, daily_entry.water, daily_entry.steps, daily_entry.sleep))
 
         connection.commit()
         connection.close()
@@ -180,7 +184,7 @@ class Database():
         connection.close()
 
         if output:
-            daily_entry = DailyEntry(datetime.strptime(output[1], "%Y-%m-%d").date(), output[2], output[3], output[4], output[5])
+            daily_entry = DailyEntry(datetime.strptime(output[1], "%Y-%m-%d").date(), output[2], output[3], output[4], output[5], output[6])
             return daily_entry
         
     # Fetch all daily entries from a specified date in a N day span
@@ -205,7 +209,7 @@ class Database():
         return [] 
         
     # Update data related to a daily entry
-    def update_daily_entry(self, user_name: str, entry_date: date, new_date: date = None, new_weight = None, new_calories = None, new_steps = None, new_sleep = None):
+    def update_daily_entry(self, user_name: str, entry_date: date, new_date: date = None, new_weight = None, new_calories = None, new_water = None, new_steps = None, new_sleep = None):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
 
@@ -213,6 +217,8 @@ class Database():
             cursor.execute("""UPDATE daily_entries SET weight = (?) WHERE user_name = (?) AND entry_date = (?)""", (new_weight, user_name, entry_date.strftime("%Y-%m-%d")))
         if new_calories:
             cursor.execute("""UPDATE daily_entries SET calories = (?) WHERE user_name = (?) AND entry_date = (?)""", (new_calories, user_name, entry_date.strftime("%Y-%m-%d")))
+        if new_water:
+            cursor.execute("""UPDATE daily_entries SET water = (?) WHERE user_name = (?) AND entry_date = (?)""", (new_water, user_name, entry_date.strftime("%Y-%m-%d")))
         if new_steps:
             cursor.execute("""UPDATE daily_entries SET steps = (?) WHERE user_name = (?) AND entry_date = (?)""", (new_steps, user_name, entry_date.strftime("%Y-%m-%d")))
         if new_sleep:

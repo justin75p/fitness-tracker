@@ -10,10 +10,11 @@ class User():
 
 # Class to log weight, calories, steps and sleep daily
 class DailyEntry():
-    def __init__(self, entry_date: date, weight, calories, steps, sleep):
+    def __init__(self, entry_date: date, weight, calories, water, steps, sleep):
         self.entry_date = entry_date
         self.weight = weight
         self.calories = calories
+        self.water = water
         self.steps = steps
         self.sleep = sleep
 
