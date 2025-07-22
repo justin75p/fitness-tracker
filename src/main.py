@@ -7,6 +7,8 @@ from datetime import date, datetime, time, timedelta
 from trackables import User, DailyEntry, WorkoutEntry
 from database import Database
 
+st.set_page_config(layout="centered")
+
 database = Database()
 
 st.title("Welcome to my Fitness Tracker 📊")

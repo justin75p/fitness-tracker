@@ -7,6 +7,8 @@ from datetime import date, datetime, time, timedelta
 from trackables import User, DailyEntry, WorkoutEntry
 from database import Database
 
+st.set_page_config(layout="wide")
+
 if not st.session_state.get('user_authenticated'):
     st.error('⚠️ Please login from the home page and try again.')
     if st.button("Go Back"):
@@ -152,6 +154,8 @@ col5.metric("Daily Sleep", sleep_display, sleep_delta, border= True,
 col6.metric("Total Workout Time", minutes_display, minutes_delta, border= True,
             help= "The total amount of minutes you spent working out this week compared to last week.")
 
+st.divider()
+
 # Get data from start of current year
 current_year = date.today().year
 start_of_year = date(current_year, 1, 1)
@@ -160,10 +164,55 @@ start_of_year = date(current_year, 1, 1)
 daily_entries_data = database.get_daily_entries_from_date(st.session_state['selected_user'], start_of_year, 365)
 weight_entries_data = database.get_workout_entries_from_date(st.session_state['selected_user'], start_of_year, 365)
 
+st.subheader("Weight Chart")
 # Create a chart to show weight trends
 weight_entries = [entry for entry in daily_entries_data if entry.weight is not None]
 weight_data = pd.DataFrame({
     'Date': [entry.entry_date for entry in weight_entries], 
-    'Weight': [entry.weight for entry in weight_entries]
+    'Weight (lbs)': [entry.weight for entry in weight_entries]
 })
-st.line_chart(weight_data, x='Date', y='Weight')
+st.line_chart(weight_data, x='Date', y='Weight (lbs)')
+
+
+stepsChart, sleepChart = st.columns(2)
+caloriesChart, waterChart = st.columns(2)
+
+with caloriesChart:
+    st.subheader("Calories Chart")
+    # Create a chart to show calorie trends
+    calories_entries = [entry for entry in daily_entries_data if entry.calories is not None]
+    calories_data = pd.DataFrame({
+        'Date': [entry.entry_date for entry in calories_entries], 
+        'Calories Consumed (cals)': [entry.calories for entry in calories_entries]
+    })
+    st.line_chart(calories_data, x='Date', y='Calories Consumed (cals)')
+
+with waterChart:
+    st.subheader("Water Intake Chart")
+    # Create a chart to show water intake trends
+    water_entries = [entry for entry in daily_entries_data if entry.water is not None]
+    water_data = pd.DataFrame({
+        'Date': [entry.entry_date for entry in water_entries], 
+        'Water Consumed (mL)': [entry.water for entry in water_entries]
+    })
+    st.line_chart(water_data, x='Date', y='Water Consumed (mL)')
+
+with stepsChart:
+    st.subheader("Daily Steps Chart")
+    # Create a chart to show step trends
+    steps_entries = [entry for entry in daily_entries_data if entry.steps is not None]
+    steps_data = pd.DataFrame({
+        'Date': [entry.entry_date for entry in steps_entries], 
+        'Steps': [entry.steps for entry in steps_entries]
+    })
+    st.bar_chart(steps_data, x='Date', y='Steps')
+
+with sleepChart:
+    st.subheader("Daily Sleep Chart")
+    # Create a chart to show sleep trends
+    sleep_entries = [entry for entry in daily_entries_data if entry.water is not None]
+    sleep_data = pd.DataFrame({
+        'Date': [entry.entry_date for entry in sleep_entries], 
+        'Time Slept (hrs)': [entry.sleep for entry in sleep_entries]
+    })
+    st.line_chart(sleep_data, x='Date', y='Time Slept (hrs)')
