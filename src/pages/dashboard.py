@@ -134,6 +134,7 @@ else:
     minutes_display = "N/A"
     minutes_delta = None
 
+# Metrics for weight, calories consumed and water consumed
 col1, col2, col3 = st.columns(3)
 col1.metric("Weight", weight_display, weight_delta, border= True,
             help= "Your average weight this week compared to last week.")
@@ -142,6 +143,7 @@ col2.metric("Calories Consumed", calories_display, calories_delta, border= True,
 col3.metric("Water Consumed", water_display, water_delta, border= True,
             help= "The average amount of water you drank everyday this week compared to last week.")
 
+# Metrics for daily steps, daily sleep, and total minutes worked out
 col4, col5, col6 = st.columns(3)
 col4.metric("Daily Steps", steps_display, steps_delta, border= True,
             help= "The average amount of steps you took everyday this week compared to last week.")
@@ -149,3 +151,19 @@ col5.metric("Daily Sleep", sleep_display, sleep_delta, border= True,
             help= "How many hours on average you slept each day this week compared to last week.")
 col6.metric("Total Workout Time", minutes_display, minutes_delta, border= True,
             help= "The total amount of minutes you spent working out this week compared to last week.")
+
+# Get data from start of current year
+current_year = date.today().year
+start_of_year = date(current_year, 1, 1)
+days_since_start = (date.today() - start_of_year).days + 1
+
+daily_entries_data = database.get_daily_entries_from_date(st.session_state['selected_user'], start_of_year, days_since_start)
+weight_entries_data = database.get_workout_entries_from_date(st.session_state['selected_user'], start_of_year, days_since_start)
+
+# Create a chart to show weight trends
+weight_entries = [entry for entry in daily_entries_data if entry.weight is not None]
+weight_data = pd.DataFrame({
+    'Date': [entry.entry_date for entry in weight_entries], 
+    'Weight': [entry.weight for entry in weight_entries]
+})
+st.line_chart(weight_data, x='Date', y='Weight')
