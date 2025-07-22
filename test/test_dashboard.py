@@ -18,13 +18,13 @@ database.insert_user(user)
 
 # Generate 2 weeks of data
 last_week_dates = [
-    date(2025, 7, 7),   # Monday
-    date(2025, 7, 8),   # Tuesday  
-    date(2025, 7, 9),   # Wednesday
-    date(2025, 7, 10),  # Thursday
-    date(2025, 7, 11),  # Friday
-    date(2025, 7, 12),  # Saturday
-    date(2025, 7, 13),  # Sunday
+    date(2025, 7, 14),   # Monday
+    date(2025, 7, 15),   # Tuesday  
+    date(2025, 7, 16),   # Wednesday
+    date(2025, 7, 17),  # Thursday
+    date(2025, 7, 18),  # Friday
+    date(2025, 7, 19),  # Saturday
+    date(2025, 7, 20),  # Sunday
 ]
 
 for i, test_date in enumerate(last_week_dates):
@@ -50,13 +50,13 @@ for i, test_date in enumerate(last_week_dates):
         database.insert_workout_entry("John", workout_entry)
 
 this_week_dates = [
-    date(2025, 7, 14),  # Monday
-    date(2025, 7, 15),  # Tuesday  
-    date(2025, 7, 16),  # Wednesday
-    date(2025, 7, 17),  # Thursday
-    date(2025, 7, 18),  # Friday
-    date(2025, 7, 19),  # Saturday
-    date(2025, 7, 20),  # Sunday
+    date(2025, 7, 21),  # Monday
+    date(2025, 7, 22),  # Tuesday  
+    date(2025, 7, 23),  # Wednesday
+    date(2025, 7, 24),  # Thursday
+    date(2025, 7, 25),  # Friday
+    date(2025, 7, 26),  # Saturday
+    date(2025, 7, 27),  # Sunday
 ]
 
 for i, test_date in enumerate(this_week_dates):
