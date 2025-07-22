@@ -155,10 +155,10 @@ col6.metric("Total Workout Time", minutes_display, minutes_delta, border= True,
 # Get data from start of current year
 current_year = date.today().year
 start_of_year = date(current_year, 1, 1)
-days_since_start = (date.today() - start_of_year).days + 1
+# days_since_start = (date.today() - start_of_year).days + 1
 
-daily_entries_data = database.get_daily_entries_from_date(st.session_state['selected_user'], start_of_year, days_since_start)
-weight_entries_data = database.get_workout_entries_from_date(st.session_state['selected_user'], start_of_year, days_since_start)
+daily_entries_data = database.get_daily_entries_from_date(st.session_state['selected_user'], start_of_year, 365)
+weight_entries_data = database.get_workout_entries_from_date(st.session_state['selected_user'], start_of_year, 365)
 
 # Create a chart to show weight trends
 weight_entries = [entry for entry in daily_entries_data if entry.weight is not None]
