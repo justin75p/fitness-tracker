@@ -162,7 +162,7 @@ start_of_year = date(current_year, 1, 1)
 # days_since_start = (date.today() - start_of_year).days + 1
 
 daily_entries_data = database.get_daily_entries_from_date(st.session_state['selected_user'], start_of_year, 365)
-weight_entries_data = database.get_workout_entries_from_date(st.session_state['selected_user'], start_of_year, 365)
+workout_entries_data = database.get_workout_entries_from_date(st.session_state['selected_user'], start_of_year, 365)
 
 st.subheader("Weight Chart")
 # Create a chart to show weight trends
@@ -216,3 +216,16 @@ with sleepChart:
         'Time Slept (hrs)': [entry.sleep for entry in sleep_entries]
     })
     st.line_chart(sleep_data, x='Date', y='Time Slept (hrs)')
+
+# Create a table showing workout entries
+st.subheader("Workout Table")
+workout_entries = [entry for entry in workout_entries_data if entry.minutes is not None]
+workout_data = pd.DataFrame({
+    'Date': [entry.entry_date for entry in workout_entries],
+    'Time': [entry.workout_time.strftime('%H:%M') for entry in workout_entries],
+    'Workout Type': [entry.workout_type for entry in workout_entries],
+    'Duration (min)': [entry.minutes for entry in workout_entries],
+    'Intensity': [entry.intensity for entry in workout_entries]
+})
+
+st.dataframe(workout_data, hide_index=True, height=300)
