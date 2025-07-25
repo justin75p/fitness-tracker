@@ -18,6 +18,18 @@ if not st.session_state.get('user_authenticated'):
 database = Database()
 
 st.title(f"Welcome back, {st.session_state['selected_user']}! 💪")
+
+with st.expander("Create a new Entry:", expanded=False, width="stretch"):
+    dailyEntryCol, workoutEntryCol = st.columns(2)
+
+    with dailyEntryCol:
+        with st.form("daily_entry_creation_form", clear_on_submit= True):
+
+    with workoutEntryCol:
+        with st.form("workout_entry_creation_form", clear_on_submit= True):
+            
+
+
 st.subheader("Your weekly averages so far:")
 
 # Gather dates used for the averages of this week so far, and last week
@@ -210,7 +222,7 @@ with stepsChart:
 with sleepChart:
     st.subheader("Daily Sleep Chart")
     # Create a chart to show sleep trends
-    sleep_entries = [entry for entry in daily_entries_data if entry.water is not None]
+    sleep_entries = [entry for entry in daily_entries_data if entry.sleep is not None]
     sleep_data = pd.DataFrame({
         'Date': [entry.entry_date for entry in sleep_entries], 
         'Time Slept (hrs)': [entry.sleep for entry in sleep_entries]
