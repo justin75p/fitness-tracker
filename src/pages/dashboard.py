@@ -37,9 +37,13 @@ with st.expander("Create a new Entry:", expanded=False):
                 if daily_entry_date and weight and calories and water and steps and sleep:
                     database.insert_daily_entry(st.session_state['selected_user'],
                                                 DailyEntry(daily_entry_date, weight, calories, water, steps, sleep))
+                    st.session_state["daily_entry_created"] = True
                     st.rerun()
                 else:
                     st.warning("❌ Please fill in all required fields!")
+            if 'daily_entry_created' in st.session_state:
+                st.success("✅ Daily Entry Created!")
+                del st.session_state['daily_entry_created']
 
     with workoutEntryCol:
         with st.form("workout_entry_creation_form", clear_on_submit= True):
@@ -55,9 +59,14 @@ with st.expander("Create a new Entry:", expanded=False):
                 if workout_entry_date and workout_time and workout_type and minutes and intensity:
                     database.insert_workout_entry(st.session_state['selected_user'],
                                                 WorkoutEntry(workout_entry_date, workout_time, workout_type, minutes, intensity))
+                    st.session_state["workout_entry_created"] = True
                     st.rerun()
                 else:
                     st.warning("❌ Please fill in all required fields!")
+
+            if 'workout_entry_created' in st.session_state:
+                st.success("✅ Workout Entry Created!")
+                del st.session_state['workout_entry_created']
 
 
 st.subheader("Your weekly averages so far:")
