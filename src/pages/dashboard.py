@@ -29,7 +29,7 @@ with st.expander("Create a new Entry:", expanded=False):
             calories = st.number_input("Calories (cal)", min_value= 0.0, step= 1.0, value= None)
             water = st.number_input("Water (mL)", min_value= 0.0, step= 100.0, value= None)
             steps = st.number_input("Steps", min_value= 0.0, step= 1.0, value= None)
-            sleep = st.number_input("Sleep", min_value= 0.0, step= 0.1, value= None)
+            sleep = st.number_input("Sleep (hrs)", min_value= 0.0, step= 0.1, value= None)
 
             submit_daily_entry = st.form_submit_button("Create Daily Entry")
 
@@ -50,7 +50,7 @@ with st.expander("Create a new Entry:", expanded=False):
             workout_entry_date = st.date_input("Date", value = date.today())
             workout_time = st.time_input("Time", value = "now")
             workout_type = st.text_input("Workout Type", placeholder= "e.g. Running, Weightlifting")
-            minutes = st.number_input("Duration", min_value= 0, value= None)
+            minutes = st.number_input("Duration (mins)", min_value= 0, value= None)
             intensity = st.selectbox("Intensity", options= ['Low', 'Moderate', 'High'])
             
             submit_workout_entry = st.form_submit_button("Create Workout Entry")
