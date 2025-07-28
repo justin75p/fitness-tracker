@@ -19,55 +19,68 @@ database = Database()
 
 st.title(f"Welcome back, {st.session_state['selected_user']}! 💪")
 
-with st.expander("Create a new Entry:", expanded=False):
-    dailyEntryCol, workoutEntryCol = st.columns(2)
+expanderCol, chatBotCol = st.columns([0.5, 0.5])
 
-    with dailyEntryCol:
-        with st.form("daily_entry_creation_form", clear_on_submit= True):
-            daily_entry_date = st.date_input("Date", value = date.today())
-            weight = st.number_input("Weight (lbs)", min_value= 0.0, step= 0.1, value= None)
-            calories = st.number_input("Calories (cal)", min_value= 0.0, step= 1.0, value= None)
-            water = st.number_input("Water (mL)", min_value= 0.0, step= 100.0, value= None)
-            steps = st.number_input("Steps", min_value= 0.0, step= 1.0, value= None)
-            sleep = st.number_input("Sleep (hrs)", min_value= 0.0, step= 0.1, value= None)
+with expanderCol:
+    with st.expander("📕 Create a new Entry:", expanded=False):
+        dailyEntryCol, workoutEntryCol = st.columns(2)
 
-            submit_daily_entry = st.form_submit_button("Create Daily Entry")
+        with dailyEntryCol:
+            with st.form("daily_entry_creation_form", clear_on_submit= True):
+                daily_entry_date = st.date_input("Date", value = date.today())
+                weight = st.number_input("Weight (lbs)", min_value= 0.0, step= 0.1, value= None)
+                calories = st.number_input("Calories (cal)", min_value= 0.0, step= 1.0, value= None)
+                water = st.number_input("Water (mL)", min_value= 0.0, step= 100.0, value= None)
+                steps = st.number_input("Steps", min_value= 0.0, step= 1.0, value= None)
+                sleep = st.number_input("Sleep (hrs)", min_value= 0.0, step= 0.1, value= None)
 
-            if submit_daily_entry:
-                if daily_entry_date and weight and calories and water and steps and sleep:
-                    database.insert_daily_entry(st.session_state['selected_user'],
-                                                DailyEntry(daily_entry_date, weight, calories, water, steps, sleep))
-                    st.session_state["daily_entry_created"] = True
-                    st.rerun()
-                else:
-                    st.warning("❌ Please fill in all required fields!")
-            if 'daily_entry_created' in st.session_state:
-                st.success("✅ Daily Entry Created!")
-                del st.session_state['daily_entry_created']
+                submit_daily_entry = st.form_submit_button("Create Daily Entry", type="primary")
 
-    with workoutEntryCol:
-        with st.form("workout_entry_creation_form", clear_on_submit= True):
-            workout_entry_date = st.date_input("Date", value = date.today())
-            workout_time = st.time_input("Time", value = "now")
-            workout_type = st.text_input("Workout Type", placeholder= "e.g. Running, Weightlifting")
-            minutes = st.number_input("Duration (mins)", min_value= 0, value= None)
-            intensity = st.selectbox("Intensity", options= ['Low', 'Moderate', 'High'])
-            
-            submit_workout_entry = st.form_submit_button("Create Workout Entry")
+                if submit_daily_entry:
+                    if daily_entry_date and weight and calories and water and steps and sleep:
+                        database.insert_daily_entry(st.session_state['selected_user'],
+                                                    DailyEntry(daily_entry_date, weight, calories, water, steps, sleep))
+                        st.session_state["daily_entry_created"] = True
+                        st.rerun()
+                    else:
+                        st.warning("❌ Please fill in all required fields!")
+                if 'daily_entry_created' in st.session_state:
+                    st.success("✅ Daily Entry Created!")
+                    del st.session_state['daily_entry_created']
 
-            if submit_workout_entry:
-                if workout_entry_date and workout_time and workout_type and minutes and intensity:
-                    database.insert_workout_entry(st.session_state['selected_user'],
-                                                WorkoutEntry(workout_entry_date, workout_time, workout_type, minutes, intensity))
-                    st.session_state["workout_entry_created"] = True
-                    st.rerun()
-                else:
-                    st.warning("❌ Please fill in all required fields!")
+        with workoutEntryCol:
+            with st.form("workout_entry_creation_form", clear_on_submit= True):
+                workout_entry_date = st.date_input("Date", value = date.today())
+                workout_time = st.time_input("Time", value = "now")
+                workout_type = st.text_input("Workout Type", placeholder= "e.g. Running, Weightlifting")
+                minutes = st.number_input("Duration (mins)", min_value= 0, value= None)
+                intensity = st.selectbox("Intensity", options= ['Low', 'Moderate', 'High'])
+                
+                submit_workout_entry = st.form_submit_button("Create Workout Entry", type="primary")
 
-            if 'workout_entry_created' in st.session_state:
-                st.success("✅ Workout Entry Created!")
-                del st.session_state['workout_entry_created']
+                if submit_workout_entry:
+                    if workout_entry_date and workout_time and workout_type and minutes and intensity:
+                        database.insert_workout_entry(st.session_state['selected_user'],
+                                                    WorkoutEntry(workout_entry_date, workout_time, workout_type, minutes, intensity))
+                        st.session_state["workout_entry_created"] = True
+                        st.rerun()
+                    else:
+                        st.warning("❌ Please fill in all required fields!")
 
+                if 'workout_entry_created' in st.session_state:
+                    st.success("✅ Workout Entry Created!")
+                    del st.session_state['workout_entry_created']
+
+with chatBotCol:
+    with st.expander("🤖 AI Fitness Coach:", expanded=False):
+        st.write("💬 Get personalized health and fitness advice from the AI Fitness Coach!")
+        st.write("Ask about:")
+        st.write("• 🏋️ Workout routines (strength, cardio, flexibility)")
+        st.write("• 🥗 Nutrition tips (meals, macros, supplements)")
+        st.write("• 🧠 Health guidance (recovery, motivation, habits)")
+
+        if st.button("💬 Start Chat", type="primary", use_container_width=True):
+            st.switch_page("pages/chat.py")
 
 st.subheader("Your weekly averages so far:")
 
