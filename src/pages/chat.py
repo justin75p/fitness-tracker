@@ -1,0 +1,16 @@
+import streamlit as st
+from streamlit_extras.stylable_container import stylable_container
+import pandas as pd
+import numpy as np
+
+from datetime import date, datetime, time, timedelta
+from trackables import User, DailyEntry, WorkoutEntry
+from database import Database
+
+st.set_page_config(layout="wide")
+
+if not st.session_state.get('user_authenticated'):
+    st.error('⚠️ Please login from the home page and try again.')
+    if st.button("Go Back"):
+        st.switch_page("main.py")
+    st.stop()
