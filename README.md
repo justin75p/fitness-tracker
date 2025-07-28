@@ -4,12 +4,15 @@ A personal fitness tracker built in Python to track an individual's health and f
 
 ## Features
 - Web interface with multi-user support
-- Track steps, calories, sleep, weight
-- Log workouts
-- View progress summaries generated each week
+- Track steps, calories, water intake, sleep, weight
+- Log workouts with detailed information
+- View progress summaries with interactive charts
+- AI chatbot for personalized fitness and health advice
 
 ## Technologies Used
 - Python
 - SQLite
 - Streamlit
-- matplotlib
+- Pandas
+- Hugging Face Inference API 
+- Mistral AI 7B Instruct (for chatbot)
