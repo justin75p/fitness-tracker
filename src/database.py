@@ -210,7 +210,7 @@ class Database():
     
     # Returns data from Daily Entries as dictionary objects from a specified date in a N day span
     def get_daily_entries_data_for_ai(self, user_name: str, start_date: date, num_days):
-        daily_entries = self.get_daily_entries_from_date(user_name, start_date)
+        daily_entries = self.get_daily_entries_from_date(user_name, start_date, num_days)
 
         return [
             {
@@ -326,7 +326,7 @@ class Database():
     
     # Returns data from Workout Entries as dictionary objects from a specified date in a N day span
     def get_workout_entries_data_for_ai(self, user_name: str, start_date: date, num_days):
-        workout_entries = self.get_workout_entries_from_date(user_name, start_date)
+        workout_entries = self.get_workout_entries_from_date(user_name, start_date, num_days)
 
         return [
             {
