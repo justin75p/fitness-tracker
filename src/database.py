@@ -210,6 +210,19 @@ class Database():
     
     # Returns data from Daily Entries as dictionary objects from a specified date in a N day span
     def get_daily_entries_data_for_ai(self, user_name: str, start_date: date, num_days):
+        daily_entries = self.get_daily_entries_from_date(user_name, start_date)
+
+        return [
+            {
+            "date": str(entry.entry_date),
+            "weight": entry.weight,
+            "calories": entry.calories,
+            "water": entry.water,
+            "steps": entry.steps,
+            "sleep": entry.sleep
+            }
+            for entry in daily_entries if entry is not None
+        ]
 
         
     # Update data related to a daily entry
@@ -312,7 +325,19 @@ class Database():
         return [] 
     
     # Returns data from Workout Entries as dictionary objects from a specified date in a N day span
-    def get_daily_entries_data_for_ai(self, user_name: str, start_date: date, num_days):
+    def get_workout_entries_data_for_ai(self, user_name: str, start_date: date, num_days):
+        workout_entries = self.get_workout_entries_from_date(user_name, start_date)
+
+        return [
+            {
+            "date": str(entry.entry_date),
+            "time": str(entry.workout_time),
+            "type": entry.workout_type,
+            "minutes": entry.minutes,
+            "intensity": entry.intensity
+            }
+            for entry in workout_entries if entry is not None
+        ]
     
     # Update data related to a workout entry
     def update_workout_entry(self, user_name: str, entry_date: date, workout_time: time, new_date: date = None, new_time: time = None, new_type = None, new_minutes = None, new_intensity = None):
