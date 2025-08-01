@@ -16,6 +16,8 @@ if not st.session_state.get('user_authenticated'):
         st.switch_page("main.py")
     st.stop()
 
+database = Database()
+
 st.title("Fitness Coach Chat")
 
 client = InferenceClient(api_key=st.secrets["HF_TOKEN"])
@@ -41,8 +43,14 @@ if prompt := st.chat_input("How can I help you?"):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         response = ""
+
+        daily_entries_data = database.get_daily_entries_data_for_ai(st.session_state['selected_user'], date.today() - timedelta(days= 30), 30)
+        workout_entries_data = database.get_workout_entries_data_for_ai(st.session_state['selected_user'], date.today() - timedelta(days= 30), 30)
         
-        messages = [{"role": "system", "content": "You are a friendly fitness coach named Coach. Always start your responses with 'Coach:'. Give brief, helpful answers. Only provide detailed information when specifically asked."}]
+        messages = [
+            {"role": "system", "content": "You are a friendly fitness coach named Coach. Always start your responses with 'Coach:'. Give brief, helpful answers. Only provide detailed information when specifically asked."},
+            {"role": "system", "content": f"Here are the user's data from the last 30 days: \nDaily Entries:\n{daily_entries_data}\n\nWorkout Entries:\n{workout_entries_data}\n\nAnalyze this data to give personalized advice when asked."}
+            ]
         messages += st.session_state.messages
 
         stream = client.chat.completions.create(
